@@ -190,6 +190,8 @@ export const useAuth = () => {
       toast.error("Logout failed");
     }
   };
+  const loadUserData = async () => {
+  };
 
   return {
     currentUser,
