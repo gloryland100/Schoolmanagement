@@ -121,8 +121,8 @@ export const useAuth = () => {
     try {
       setAuthLoading(true);
       const email = schoolIdToEmail(schoolId);
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      await loadUserData(userCredential.user);
+      await signInWithEmailAndPassword(auth, email, password);
+      // onAuthStateChanged will fire and call loadUserData, which sets authLoading(false)
       toast.success("Login successful!");
       return true;
     } catch (error: any) {
@@ -132,9 +132,8 @@ export const useAuth = () => {
       } else {
         toast.error("Login failed. Please try again.");
       }
-      return false;
-    } finally {
       setAuthLoading(false);
+      return false;
     }
   };
 

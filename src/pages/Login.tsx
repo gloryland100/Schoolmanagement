@@ -9,13 +9,11 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { login, authLoading } = useAuth();
-  const { currentUser, userRole, setAuthLoading } = useStore();
+  const { currentUser, userRole } = useStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!schoolId.trim() || !password.trim()) return;
-
-    setAuthLoading(true);
     await login(schoolId.trim(), password);
   };
 
