@@ -5,6 +5,8 @@ import {
   updateProfile,
   onAuthStateChanged,
   signOut,
+  inMemoryPersistence,
+  setPersistence,
   type User as FirebaseUser,
 } from "firebase/auth";
 import {
@@ -144,6 +146,12 @@ export const useAuth = () => {
   ): Promise<{ success: boolean; uid?: string; error?: string }> => {
     try {
       const email = toEmail(schoolId);
+      
+            // Ensure in-memory persistence so the secondary auth session never touches
+      // browser storage (localStorage/IndexedDB), preventing it from interfering
+      // with the primary admin session when we sign out the secondary auth after
+      // creating the user.
+      await setPersistence(secondaryAuth, inMemoryPersistence);
 
       // secondaryAuth keeps the primary auth session (admin) intact.
       const userCredential = await createUserWithEmailAndPassword(secondaryAuth, email, password);
