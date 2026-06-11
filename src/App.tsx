@@ -1,5 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import { useStore } from "@/store/useStore";
+import { useAuthInit } from "@/hooks/useAuth";
 import AppLayout from "@/components/layout/AppLayout";
 import Login from "@/pages/Login";
 
@@ -30,46 +32,62 @@ import StudentMessages from "@/pages/student/StudentMessages";
 import StudentAnnouncements from "@/pages/student/StudentAnnouncements";
 
 function App() {
-  const { userRole } = useStore();
+  useAuthInit(); // Initialize Firebase auth state listener once for the entire app.
+  const { userRole, darkMode } = useStore();
 
   return (
-    <Routes>
-      {/* Public Route */}
-      <Route path="/login" element={<Login />} />
+    <>
+      <Routes>
+        {/* Public Route */}
+        <Route path="/login" element={<Login />} />
 
-      {/* Protected Routes with Layout */}
-      <Route element={<AppLayout />}>
-        {/* Admin Routes */}
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/students" element={<StudentManagement />} />
-        <Route path="/admin/teachers" element={<TeacherManagement />} />
-        <Route path="/admin/results" element={<ResultApproval />} />
-        <Route path="/admin/timetable" element={<TimetableManagement />} />
-        <Route path="/admin/announcements" element={<AnnouncementManagement />} />
-        <Route path="/admin/payments" element={<PaymentManagement />} />
-        <Route path="/admin/messages" element={<Messages />} />
-        <Route path="/admin/settings" element={<AdminSettings />} />
+        {/* Protected Routes with Layout */}
+        <Route element={<AppLayout />}>
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/students" element={<StudentManagement />} />
+          <Route path="/admin/teachers" element={<TeacherManagement />} />
+          <Route path="/admin/results" element={<ResultApproval />} />
+          <Route path="/admin/timetable" element={<TimetableManagement />} />
+          <Route path="/admin/announcements" element={<AnnouncementManagement />} />
+          <Route path="/admin/payments" element={<PaymentManagement />} />
+          <Route path="/admin/messages" element={<Messages />} />
+          <Route path="/admin/settings" element={<AdminSettings />} />
 
-        {/* Teacher Routes */}
-        <Route path="/teacher" element={<TeacherDashboard />} />
-        <Route path="/teacher/students" element={<TeacherStudents />} />
-        <Route path="/teacher/results" element={<TeacherResults />} />
-        <Route path="/teacher/timetable" element={<TeacherTimetable />} />
-        <Route path="/teacher/messages" element={<TeacherMessages />} />
+          {/* Teacher Routes */}
+          <Route path="/teacher" element={<TeacherDashboard />} />
+          <Route path="/teacher/students" element={<TeacherStudents />} />
+          <Route path="/teacher/results" element={<TeacherResults />} />
+          <Route path="/teacher/timetable" element={<TeacherTimetable />} />
+          <Route path="/teacher/messages" element={<TeacherMessages />} />
+          
+                    {/* Student Routes */}
+          <Route path="/student" element={<StudentDashboard />} />
+          <Route path="/student/results" element={<StudentResults />} />
+          <Route path="/student/timetable" element={<StudentTimetable />} />
+          <Route path="/student/payments" element={<StudentPayments />} />
+          <Route path="/student/messages" element={<StudentMessages />} />
+          <Route path="/student/announcements" element={<StudentAnnouncements />} />
+        </Route>
 
-        {/* Student Routes */}
-        <Route path="/student" element={<StudentDashboard />} />
-        <Route path="/student/results" element={<StudentResults />} />
-        <Route path="/student/timetable" element={<StudentTimetable />} />
-        <Route path="/student/payments" element={<StudentPayments />} />
-        <Route path="/student/messages" element={<StudentMessages />} />
-        <Route path="/student/announcements" element={<StudentAnnouncements />} />
-      </Route>
+        {/* Default redirect */}
+        <Route path="/" element={<Navigate to={userRole ? `/${userRole}` : "/login"} replace />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
 
-      {/* Default redirect */}
-      <Route path="/" element={<Navigate to={userRole ? `/${userRole}` : "/login"} replace />} />
-      <Route path="*" element={<Navigate to="/login" replace />} />
-    </Routes>
+      {/* Global toast notifications — rendered here so they appear on ALL pages including Login. */}
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: darkMode ? "#1f2937" : "#fff",
+            color: darkMode ? "#fff" : "#1f2937",
+            border: `1px solid ${darkMode ? "#374151" : "#e5e7eb"}`,
+          },
+        }}
+      />
+    </>
   );
 }
 
