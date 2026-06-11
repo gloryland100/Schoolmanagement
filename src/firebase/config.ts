@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, inMemoryPersistence, setPersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
@@ -22,5 +22,9 @@ export const storage = getStorage(app);
 // This prevents createUserWithEmailAndPassword from signing out the current admin.
 const secondaryApp = initializeApp(firebaseConfig, "secondary");
 export const secondaryAuth = getAuth(secondaryApp);
+// In-memory persistence ensures the secondary auth session never touches browser storage
+// (localStorage/IndexedDB), which would otherwise interfere with the primary admin session
+// when signOut(secondaryAuth) is called after creating a user.
+setPersistence(secondaryAuth, inMemoryPersistence).catch(console.error);
 
 export default app;

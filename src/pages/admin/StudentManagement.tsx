@@ -202,8 +202,8 @@ const StudentManagement = () => {
 
   const filteredStudents = students.filter((student) => {
     const matchesSearch =
-      student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.schoolId.toLowerCase().includes(searchTerm.toLowerCase());
+      (student.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (student.schoolId || "").toLowerCase().includes(searchTerm.toLowerCase());
     const matchesClass = filterClass === "all" || student.class === filterClass;
     const matchesStatus = filterStatus === "all" || student.status === filterStatus;
     return matchesSearch && matchesClass && matchesStatus;
@@ -460,7 +460,7 @@ const StudentManagement = () => {
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 rounded-full bg-[#1E3A8A] flex items-center justify-center text-white text-xs font-medium">
-                            {student.name.charAt(0)}
+                            {(student.name || "?").charAt(0)}
                           </div>
                           <div>
                             <p className="text-sm font-medium text-gray-900 dark:text-white">{student.name}</p>
