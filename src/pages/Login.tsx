@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { useStore } from "@/store/useStore";
 import { LogIn, Eye, EyeOff, School } from "lucide-react";
 import { Navigate } from "react-router-dom";
 
@@ -8,14 +7,11 @@ const Login = () => {
   const [schoolId, setSchoolId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const { login, authLoading } = useAuth();
-  const { currentUser, userRole, setAuthLoading } = useStore();
+  const { login, authLoading, currentUser, userRole } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!schoolId.trim() || !password.trim()) return;
-
-    setAuthLoading(true);
     await login(schoolId.trim(), password);
   };
 
@@ -59,16 +55,17 @@ const Login = () => {
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                  School ID
+                  School ID or Email
                 </label>
                 <div className="relative">
                   <input
                     type="text"
                     value={schoolId}
                     onChange={(e) => setSchoolId(e.target.value)}
-                    placeholder="Enter your School ID"
+                    placeholder="Enter your School ID or email"
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-[#D4A017] focus:border-transparent transition-all outline-none text-sm"
                     required
+                    autoComplete="username"
                   />
                 </div>
               </div>
@@ -85,6 +82,7 @@ const Login = () => {
                     placeholder="Enter your password"
                     className="w-full px-4 py-3 pr-12 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-[#D4A017] focus:border-transparent transition-all outline-none text-sm"
                     required
+                    autoComplete="current-password"
                   />
                   <button
                     type="button"
@@ -112,9 +110,12 @@ const Login = () => {
               </button>
             </form>
 
-            <div className="mt-6 text-center">
+            <div className="mt-6 text-center space-y-1">
               <p className="text-xs text-gray-500 dark:text-gray-400">
                 Enter your School ID and password to access your portal
+              </p>
+              <p className="text-xs text-gray-400 dark:text-gray-500">
+                Admin: use your School ID or the email you registered with
               </p>
             </div>
           </div>
