@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import { useStore } from "@/store/useStore";
 import AppLayout from "@/components/layout/AppLayout";
 import Login from "@/pages/Login";
@@ -30,9 +31,10 @@ import StudentMessages from "@/pages/student/StudentMessages";
 import StudentAnnouncements from "@/pages/student/StudentAnnouncements";
 
 function App() {
-  const { userRole } = useStore();
+  const { userRole, darkMode } = useStore();
 
   return (
+    <>
     <Routes>
       {/* Public Route */}
       <Route path="/login" element={<Login />} />
@@ -70,6 +72,18 @@ function App() {
       <Route path="/" element={<Navigate to={userRole ? `/${userRole}` : "/login"} replace />} />
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
+    <Toaster
+      position="top-right"
+      toastOptions={{
+        duration: 3000,
+        style: {
+          background: darkMode ? "#1f2937" : "#fff",
+          color: darkMode ? "#fff" : "#1f2937",
+          border: `1px solid ${darkMode ? "#374151" : "#e5e7eb"}`,
+        },
+      }}
+    />
+    </>
   );
 }
 

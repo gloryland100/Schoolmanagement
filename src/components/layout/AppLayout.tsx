@@ -3,7 +3,6 @@ import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useStore } from "@/store/useStore";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
-import { Toaster } from "react-hot-toast";
 
 const AppLayout = () => {
   const { currentUser, userRole, authLoading, darkMode, sidebarOpen } = useStore();
@@ -65,17 +64,6 @@ const AppLayout = () => {
           </main>
         </div>
       </div>
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          duration: 3000,
-          style: {
-            background: darkMode ? "#1f2937" : "#fff",
-            color: darkMode ? "#fff" : "#1f2937",
-            border: `1px solid ${darkMode ? "#374151" : "#e5e7eb"}`,
-          },
-        }}
-      />
     </div>
   );
 };
