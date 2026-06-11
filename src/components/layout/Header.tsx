@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useStore } from "@/store/useStore";
+import { useAuth } from "@/hooks/useAuth";
 import { Bell, Moon, Sun, User, Menu } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const { currentUser, userRole, darkMode, toggleDarkMode, notifications, sidebarOpen, setSidebarOpen } = useStore();
+  const { logout } = useAuth();
   const [showProfile, setShowProfile] = useState(false);
   const navigate = useNavigate();
 
@@ -98,7 +100,7 @@ const Header = () => {
                 <button
                   onClick={() => {
                     setShowProfile(false);
-                    navigate("/login");
+                    logout();
                   }}
                   className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                 >
